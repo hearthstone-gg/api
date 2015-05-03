@@ -1,9 +1,10 @@
 var Hapi = require('hapi');
+var port = 3000;
 
 var server = new Hapi.Server();
 
 server.connection({
-	port: 3000
+	port: port
 });
 
 server.start(function() {
