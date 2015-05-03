@@ -1,0 +1,1 @@
+Hearthstone.gg API Server
