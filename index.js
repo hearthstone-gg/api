@@ -12,6 +12,7 @@ server.start(function() {
 });
 
 server.route({
+	config: {cors: true},
 	method: 'GET',
 	path: '/ping',
 	handler: function(request, reply) {

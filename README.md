@@ -1,1 +1,9 @@
-Hearthstone.gg API Server
+#Hearthstone.gg API Server
+
+###Endpoints
+
+```/ping```
+
+```
+{ ok: true }
+```
