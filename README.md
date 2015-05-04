@@ -2,7 +2,7 @@
 
 ###Endpoints
 
-```/ping```
+Ping: ``` /ping ```
 
 ```
 { ok: true }
