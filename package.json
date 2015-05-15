@@ -10,6 +10,7 @@
   "author": "",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "hapi": "~8.4.0"
+    "hapi": "~8.4.0",
+    "pmx": "~0.3.11"
   }
 }

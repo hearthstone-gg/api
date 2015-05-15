@@ -1,3 +1,5 @@
+require('pmx').init();
+
 var Hapi = require('hapi');
 var port = 3000;
 
