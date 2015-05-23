@@ -1,6 +1,5 @@
-var argv = require('yargs').argv;
-
 require('pmx').init();
+var argv = require('yargs').argv;
 
 var Hapi = require('hapi');
 var config = require('hs.gg-config').get(argv.env || 'local').services.api;
