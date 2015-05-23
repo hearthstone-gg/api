@@ -1,12 +1,13 @@
+var argv = require('yargs').argv;
+
 require('pmx').init();
 
 var Hapi = require('hapi');
-var port = 3000;
-
+var config = require('hs.gg-config').get(argv.env || 'local').services.api;
 var server = new Hapi.Server();
 
 server.connection({
-	port: port
+	port: config.port
 });
 
 server.start(function() {

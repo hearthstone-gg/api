@@ -11,6 +11,8 @@
   "license": "BSD-2-Clause",
   "dependencies": {
     "hapi": "~8.4.0",
-    "pmx": "~0.3.11"
+    "pmx": "~0.3.11",
+    "hs.gg-config": "git+https://github.com/hearthstone-gg/config.git",
+    "yargs": "~3.9.1"
   }
 }
