@@ -1,7 +1,6 @@
 require('pmx').init();
 var argv = require('yargs').argv;
 
-var Hapi = require('hapi');
 var conf = require('hs.gg-config').get(argv.env || 'local');
 var config = conf.services.api;
 
@@ -20,8 +19,8 @@ app.use(bodyParser.urlencoded({
 //enable CORS
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header("Access-Control-Expose-Headers", "X-Total-Count");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header("Access-Control-Expose-Headers", "X-Total-Count, Authorization");
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
   next();
 });
@@ -33,8 +32,37 @@ app.use(methodOverride());
 
 mongoose.connect(conf.services.db);
 
+var basicAuth = require('basic-auth');
+
+var auth = function (req, res, next) {
+  function unauthorized(res) {
+    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+    return res.send(401);
+  };
+
+  var user = basicAuth(req);
+
+  if (!user || !user.name || !user.pass) {
+    return unauthorized(res);
+  };
+
+  if (user.name === config.adminUser && user.pass === config.adminPass) {
+    return next();
+  } else {
+    return unauthorized(res);
+  };
+};
+
 var User = conf.models.user(mongoose);
 var Game = conf.models.game(mongoose);
+
+app.post('/user', auth, function(req,res,next){ next(); });
+app.put('/user/*', auth, function(req,res,next){ next(); });
+app.delete('/user/*', auth, function(req,res,next){ next(); });
+
+app.post('/game', auth, function(req,res,next){ next(); });
+app.put('/game/*', auth, function(req,res,next){ next(); });
+app.delete('/game/*', auth, function(req,res,next){ next(); });
 
 var UserResource = restful.model('user', User);
 UserResource.methods(['get', 'post', 'put', 'delete']);
