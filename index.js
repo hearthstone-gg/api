@@ -37,7 +37,7 @@ var basicAuth = require('basic-auth');
 var auth = function (req, res, next) {
   function unauthorized(res) {
     res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-    return res.send(401);
+    return res.sendStatus(401).end();
   }
 
   var user = basicAuth(req);
@@ -46,6 +46,7 @@ var auth = function (req, res, next) {
     return unauthorized(res);
   }
 
+  
   if (user.name === config.adminUser && user.pass === config.adminPass) {
     return next();
   } else {
@@ -57,11 +58,16 @@ var User = conf.models.user(mongoose);
 var Game = conf.models.game(mongoose);
 var GlobalUser = conf.models.globalUser(mongoose);
 
+app.get('/ping', function(req,res){
+	res.sendStatus(200).end();
+});
+
+app.get('/user', auth, function(req,res,next){ next(); });
 app.post('/user', auth, function(req,res,next){ next(); });
+app.get('/user/*', auth, function(req,res,next){ next(); });
 app.put('/user/*', auth, function(req,res,next){ next(); });
 app.delete('/user/*', auth, function(req,res,next){ next(); });
 
-app.post('/game', auth, function(req,res,next){ next(); });
 app.put('/game/*', auth, function(req,res,next){ next(); });
 app.delete('/game/*', auth, function(req,res,next){ next(); });
 
