@@ -10,9 +10,14 @@
   "author": "",
   "license": "BSD-2-Clause",
   "dependencies": {
+    "body-parser": "^1.13.3",
+    "express": "^4.13.3",
     "hapi": "~8.4.0",
     "hs.gg-config": "git+https://github.com/hearthstone-gg/config.git",
+    "method-override": "^2.3.5",
     "mongoose": "^4.1.5",
+    "morgan": "^1.6.1",
+    "node-restful": "^0.2.2",
     "pmx": "~0.3.11",
     "yargs": "~3.9.1"
   }
