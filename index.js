@@ -38,23 +38,24 @@ var auth = function (req, res, next) {
   function unauthorized(res) {
     res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
     return res.send(401);
-  };
+  }
 
   var user = basicAuth(req);
 
   if (!user || !user.name || !user.pass) {
     return unauthorized(res);
-  };
+  }
 
   if (user.name === config.adminUser && user.pass === config.adminPass) {
     return next();
   } else {
     return unauthorized(res);
-  };
+  }
 };
 
 var User = conf.models.user(mongoose);
 var Game = conf.models.game(mongoose);
+var GlobalUser = conf.models.globalUser(mongoose);
 
 app.post('/user', auth, function(req,res,next){ next(); });
 app.put('/user/*', auth, function(req,res,next){ next(); });
@@ -64,11 +65,18 @@ app.post('/game', auth, function(req,res,next){ next(); });
 app.put('/game/*', auth, function(req,res,next){ next(); });
 app.delete('/game/*', auth, function(req,res,next){ next(); });
 
+app.post('/globaluser', auth, function(req,res,next){ next(); });
+app.put('/globaluser/*', auth, function(req,res,next){ next(); });
+app.delete('/globaluser/*', auth, function(req,res,next){ next(); });
+
 var UserResource = restful.model('user', User);
 UserResource.methods(['get', 'post', 'put', 'delete']);
 
 var GameResource = restful.model('game', Game);
 GameResource.methods(['get', 'post', 'put', 'delete']);
+
+var GlobalUserResource = restful.model('global-user', GlobalUser);
+GlobalUserResource.methods(['get', 'post', 'put', 'delete']);
 
 UserResource.after('get', function(req, res, next) {
 	UserResource.find({}, function(err, data){
@@ -82,10 +90,17 @@ GameResource.after('get', function(req, res, next) {
 		next();
 	});
 });
+GlobalUserResource.after('get', function(req, res, next) {
+	GlobalUserResource.find({}, function(err, data){
+		res.header('X-Total-Count', data.length);
+		next();
+	});
+});
 
 
 UserResource.register(app, '/user');
 GameResource.register(app, '/game');
+GlobalUserResource.register(app, '/global-user');
 
 
 app.listen(config.port);
